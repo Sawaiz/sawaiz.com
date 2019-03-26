@@ -6,6 +6,12 @@ This is a page with all my reccomendations. Super brutalist design, os its simpl
  - Keds
  - Water Bottle
  - Air Purifier
+ - Bowls
+ - Denim Jacket
+ - Sunscreen
+ - Foundation
+ - Setting Powder
+ - Calcualtor
 
 ## Todo
 - [ ] Ideas list

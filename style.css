@@ -1,6 +1,5 @@
 html {
     font-family: monospace;
-    font-size: 150%;
     margin: 0 auto;
     width: 95%;
 }
@@ -23,11 +22,14 @@ p {
 @media only screen and (min-width: 600px) {
     html {
         width: 560px;
+        font-size: 150%;
+        
     }
 }
 
 @media only screen and (min-width: 1200px) {
     html {
         width: 800px;
+        font-size: 150%;
     }
 }
