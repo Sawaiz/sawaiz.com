@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta content="width=device-width, initial-scale=1" name="viewport" />
+    <link rel="stylesheet" type="text/css" href="/style.css">
+    <title>Thawing Wine</title>
+</head>
+
+<body>
+
+    <header>
+        <h1 id="thawingwine">Thawing Wine</h1>
+        <p>How long does it take red wine bottle stored in a refrigerator to come to drinking temperature?</p>
+    </header>
+
+    <p>
+        Red wine is supposed to be served at (15°C-18°C) with the range varying depending on varietal, not at
+        <a href="https://en.wikipedia.org/wiki/Room_temperature#Serving_temperature_of_red_wine">modern room
+            temperature</a>. Since most people still do not own climate controlled cellars, the bottle can either
+        be held at a colder temperature in a refrigerator and thawed, or stored at room temperature and chilled.
+    </p>
+
+    <p>Since excessive heat and light exposure can also damage wine, its useful to explore the practicality of storage
+        in a refrigerator. This
+        can be calculated with thermal equations, but modeling will not be as accurate as a experiment.</p>
+
+    <h2 id="procedure">Procedure</h2>
+
+    <p>A form is created on google forms to collect data with accurate time stamping. A reminder is set about every four
+        minutes to check and log the temperatures into the form.
+    </p>
+    <a href="./full/googleform.png"><img src="./googleForm.png" alt="Form for entering the data" /></a>
+
+    <p>Two K-type thermocouples are attached to a glass bottle of room temperature oil to act as a low pass filter for
+        any room temperature variations, and a bottle of red wine directly from the refrigerator. Both are placed on the
+        same table with about a foot of separation.
+    </p>
+    <a href="./full/thermocouple.jpg"><img src="./thermocouple.jpg" alt="Bottles with attached thermocouples" /></a>
+
+    <h2 id="dataprocessing">Data Processing</h2>
+
+    <p>The data was downloaded from Google Forms as a CSV, the first few lines of <a
+            href="./data.csv"><em>data.csv</em></a> are shown below.</p>
+
+    <pre>
+    <code class="csv language-csv">
+        "Timestamp","Air temp","Wine Temp"
+        "2019/04/13 10:43:36 AM GMT+2","21.4","7.4"
+        "2019/04/13 10:44:36 AM GMT+2","21.8","7.0"
+        "2019/04/13 10:48:55 AM GMT+2","21.9","7.3"
+        "2019/04/13 10:53:30 AM GMT+2","21.8","8"
+        ...
+    </code>
+    </pre>
+
+    <p>The file is simplified with <em>sed</em> to remove the AM/PM and timezone data, also <em>1 PM</em> is
+        replaced with the 24hr format <em>13</em> and the formatted file is placed in <a
+            href="./dataFormatted.csv"><em>dataFormatted.csv</em></a>.</p>
+
+    <pre>
+    <code class="bash language-bash">
+        cat data.csv | \
+        sed -E 's/ [APM]{2} GMT\+2//g' | \
+        sed -E 's/ 1:([0-9]{2}:[0-9]{2})/ 13:\1/g' &gt; \
+        dataFormatted.csv
+    </code>
+    </pre>
+
+    <p>A gnuplot file <a href="./chart.gnuplot">chart.gnuplot</a> is made to plot the data.</p>
+
+    <pre>
+    <code class="bash language-bash">
+        gnuplot -c chart.gnuplot &gt; chart.png
+    </code>
+    </pre>
+
+    <p>Another copy of the gnuplot file, <a href="./chartDelta.gnuplot">chartDelta.gnuplot</a>,
+        is made and modified to calculate the delta (Control-Wine). This is run to generate the delta chart.</p>
+
+    <pre>
+    <code class="bash language-bash">
+        gnuplot -c chartDelta.gnuplot &gt; \
+        chartDelta.png
+    </code>
+    </pre>
+
+    <h2 id="results">Results</h2>
+
+    <p>Two charts are generated from the data set and are shown below.</p>
+    <a href="./full/chart.png"><img src="./chart.png" alt="Control and Wine bottle temperature over time" /></a>
+
+    <p>It takes approximately 105 minutes (1:45) for a bottle to enter the recommended (15°C-18°C) temperature range and
+        further exposure to room temperature allows it to remain in that range for 75 minutes (1:15).</p>
+
+    <a href="./full/chartDelta.png"><img src="./chartDelta.png"
+            alt="Delta temperature removing environmental effects" /></a>
+    <p>
+        The recovery relationship is quite linear in this domain although it will become more asymptotic as wine
+        temperature approaches air temperature.</p>
+
+    <h2 id="conclusion">Conclusion</h2>
+
+    <p>The approximately two hour wait is quite significant. If you live in a climate and have your heating set where
+        your room temperature is generally below 21°C (70°F) and never exceeds 27°C (80°F), keep the bottles at room
+        temperature and chill down in a refrigerator about 30 minutes before (determining this time requires a more
+        complex experiment).
+        Keeping it in the refrigerator after opening it for some time as well. This provides possibly double the time
+        the bottle is in the ideal range.</p>
+
+    <p>If living in a warmer climate, or with larger temperature fluctuations, keep the bottle at the top of the
+        refrigerator, and suffer the time required for it to come up to temperature, or remove it far in advance and
+        quickly chill again right before consumption, protecting the bottle from extended exposure.</p>
+
+</body>
+
+</html>
